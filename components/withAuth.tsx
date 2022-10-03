@@ -7,7 +7,9 @@ import { LoadingFullScreen } from './ui';
 
 export default function withAuth(Component: NextPage) {
     return function AuthProtected(props: {}) {
+
         const router = useRouter()
+
         const { isLoading, isAuthenticated } = useAuthenticationStatus()
 
         if (isLoading) return <LoadingFullScreen />

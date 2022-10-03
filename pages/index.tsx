@@ -1,12 +1,13 @@
+import withAuth from '../components/withAuth';
 import type { NextPage } from 'next'
-import { Button } from '@nextui-org/react';
+import { MainLayout } from '../components';
 
 const Home: NextPage = () => {
+
   return (
-    <div>
-      <Button>Hello world</Button>
-    </div>
+    <MainLayout title='LinkTree | Home'>
+    </MainLayout>
   )
 }
 
-export default Home
+export default withAuth(Home)

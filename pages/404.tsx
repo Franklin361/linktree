@@ -1,17 +1,22 @@
 import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { useAuthenticationStatus } from '@nhost/nextjs';
+import { LoadingFullScreen } from "../components";
 
-// TODO: verify user auth, then go back to login or home
-
-// pages/404.tsx
 export default function Custom404() {
 
+    const { isLoading, isAuthenticated } = useAuthenticationStatus()
     const { replace } = useRouter()
 
-    useEffect(() => {
+    if (isLoading) return <LoadingFullScreen />
+
+    if (!isAuthenticated) {
         replace('/auth/login')
-    }, [])
+        return null
+    }
 
+    if (isAuthenticated) {
+        replace('/')
+        return null
+    }
 
-    return null
 }
