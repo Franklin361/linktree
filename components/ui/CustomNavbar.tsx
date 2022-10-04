@@ -18,7 +18,7 @@ export const CustomNavbar = () => {
     const { asPath, push } = useRouter()
 
     return (
-        <Navbar isBordered variant="sticky" >
+        <Navbar isBordered variant="sticky" css={{ zIndex: '$max' }}>
             <Navbar.Toggle showIn="xs" />
             <Navbar.Brand
                 css={{

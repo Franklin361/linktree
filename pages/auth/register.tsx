@@ -25,7 +25,8 @@ const RegisterPage: NextPage = () => {
             await signUpEmailPassword(email, password, {
                 displayName: name,
                 metadata: {
-                    name
+                    name,
+                    rol: 'worker'
                 }
             })
         }

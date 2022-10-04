@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.0",
     "@nextui-org/react": "^1.0.0-beta.10",
     "@nhost/nextjs": "^1.7.6",
     "@nhost/react": "^0.13.0",
+    "@nhost/react-apollo": "^4.7.6",
     "graphql": "^16.6.0",
     "next": "12.3.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "18.7.23",
