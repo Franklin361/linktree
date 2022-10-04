@@ -2,9 +2,9 @@ import { createTheme } from "@nextui-org/react"
 
 export const darkTheme = createTheme({
     type: 'dark',
-    // theme: {
-    //     colors: {
-    //         background: '#111111'
-    //     }
-    // }
+    theme: {
+        colors: {
+            background: '#111111'
+        }
+    }
 });

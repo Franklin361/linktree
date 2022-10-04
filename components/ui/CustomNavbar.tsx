@@ -15,7 +15,8 @@ const collapseItems = [
 
 export const CustomNavbar = () => {
 
-    const { asPath } = useRouter()
+    const { asPath, push } = useRouter()
+
     return (
         <Navbar isBordered variant="sticky" >
             <Navbar.Toggle showIn="xs" />
@@ -38,7 +39,7 @@ export const CustomNavbar = () => {
             >
                 {
                     collapseItems.map(({ label, to }) => (
-                        <Navbar.Link isActive={asPath === to} href={to} key={to}>{label}</Navbar.Link>
+                        <Navbar.Link isActive={asPath === to} onPress={() => push(to)} key={to}>{label}</Navbar.Link>
                     ))
                 }
             </Navbar.Content>
@@ -102,7 +103,7 @@ export const DropDown = () => {
 
 export const NavbarCollapse = () => {
 
-    const { asPath } = useRouter()
+    const { asPath, push } = useRouter()
     return (
         <Navbar.Collapse>
 
@@ -118,7 +119,7 @@ export const NavbarCollapse = () => {
                             css={{
                                 minWidth: "100%",
                             }}
-                            href={to}
+                            onPress={() => push(to)}
                         >
                             {label}
                         </Link>

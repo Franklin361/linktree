@@ -6,6 +6,7 @@ const Home: NextPage = () => {
 
   return (
     <MainLayout title='LinkTree | Home'>
+
     </MainLayout>
   )
 }
