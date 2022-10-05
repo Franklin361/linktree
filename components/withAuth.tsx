@@ -1,7 +1,8 @@
 
-import { useRouter } from 'next/router'
-import { useAuthenticationStatus } from '@nhost/nextjs'
+import { useAuthenticationStatus } from '@nhost/nextjs';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useInitUser } from '../hooks';
 import { LoadingFullScreen } from './ui';
 
 
@@ -11,6 +12,8 @@ export default function withAuth(Component: NextPage) {
         const router = useRouter()
 
         const { isLoading, isAuthenticated } = useAuthenticationStatus()
+
+        useInitUser(isLoading)
 
         if (isLoading) return <LoadingFullScreen />
 

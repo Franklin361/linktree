@@ -1,15 +1,15 @@
-import { useRef, useState } from 'react';
-import { Row, Button, Text, Spacer, Image } from '@nextui-org/react';
+import { Button, Image, Row, Spacer, Text } from '@nextui-org/react';
 import { useUserData } from '@nhost/react';
-import { useSelectImage } from '../../../hooks';
+import { useAppSelector, useSelectImage } from '../../../hooks';
 
 interface TImageProfile {
-    isEdit: boolean
+
 }
 
-export const ImageProfile = ({ isEdit }: TImageProfile) => {
-    const user = useUserData()
-    const { fileRef, image, ...fn } = useSelectImage(user?.avatarUrl || '')
+export const ImageProfile = ({ }: TImageProfile) => {
+    const userData = useUserData()
+    const { isEdit, user } = useAppSelector(state => state.user)
+    const { fileRef, image, ...fn } = useSelectImage(user ? user.avatarUrl : userData?.avatarUrl!)
 
     return (
         <Row css={{ alignItems: 'center', '@xsMax': { flexDirection: 'column' } }} justify='flex-end'>

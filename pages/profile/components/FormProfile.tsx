@@ -1,67 +1,90 @@
 import { useMutation } from '@apollo/client';
-import { Spacer, Radio, Text, Row, Input, Col, Button, Textarea } from '@nextui-org/react';
+import { Button, Col, Input, Radio, Row, Spacer, Text, Textarea } from '@nextui-org/react';
 import { useUserData } from '@nhost/react';
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { UPDATE_USER } from '../../../graphql';
-import { useSimpleForm } from '../../../hooks';
+import { useAppDispatch, useAppSelector, useSimpleForm } from '../../../hooks';
+import { User } from '../../../interfaces';
+import { loadingUserState, openModal, setUser } from '../../../redux';
 
-interface Props {
-    isEdit: boolean,
-    handleLogin: (loading: boolean) => void
+const options: Intl.DateTimeFormatOptions = {
+    year: "2-digit",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    weekday: "long",
+    hour12: true,
+    timeZone: 'America/Santiago'
 }
 
-export const FormProfile = ({ isEdit, handleLogin }: Props) => {
+
+export const FormProfile = () => {
 
     const user = useUserData()
 
-    const [mutateUser, { loading }] = useMutation(UPDATE_USER)
+    const dispatch = useAppDispatch()
+    const { user: userState, loadingUser, isEdit } = useAppSelector(state => state.user)
+
+    const [mutateUser] = useMutation(UPDATE_USER)
+
+    const getInitialValue = useCallback(
+        (prop: keyof Omit<User, 'id' | 'email' | 'avatarUrl'>) => userState ? userState[prop] : (user as any)?.[prop] || '',
+        [],
+    )
 
     const { form, handleChange, handleSubmit } = useSimpleForm({
         initValues: {
-            name: user?.displayName || '',
-            phone: user?.metadata?.phone as string || '',
-            web: user?.metadata?.web as string || '',
-            about: user?.metadata?.about as string || '',
-            rol: user?.metadata?.rol as string || ''
-
+            displayName: getInitialValue('displayName'),
+            phone: getInitialValue('phone'),
+            web: getInitialValue('web'),
+            about: getInitialValue('about'),
+            rol: getInitialValue('rol')
         },
         onSubmit: async () => {
-            const { about, name, phone, rol, web } = form
+            const { displayName, ...rest } = form
+
+            if (!user || !user?.email) return
+
+            const { avatarUrl, id, email } = user
+
             try {
+                dispatch(loadingUserState(true))
                 await mutateUser({
                     variables: {
-                        id: user!.id,
-                        displayName: name,
-                        metadata: {
-                            about,
-                            web,
-                            phone,
-                            rol
-                        }
+                        id,
+                        displayName,
+                        metadata: { ...rest }
                     }
                 })
+                dispatch(setUser({ ...form, avatarUrl, email, id }))
                 toast.success('Updated successfully!', { id: 'only', })
             } catch (error) {
                 toast.success(error as string, { id: 'only', })
+            } finally {
+                dispatch(loadingUserState(false))
             }
         }
     })
 
-    useEffect(() => { handleLogin(loading) }, [loading])
-
+    const handleDelete = () => dispatch(openModal(true))
 
     if (!user) return null
 
     const { createdAt, email, emailVerified } = user
 
-    const isDisable = loading || !isEdit
+    const isDisable = loadingUser || !isEdit
 
     return (
 
         <Row css={{ d: 'flex', flexDirection: 'column' }}>
             <Spacer y={1} />
-            <Text size='$lg' >Account created at: <Text b color='primary'>{createdAt}</Text></Text>
+
+            <Text size='$lg' >Account created at: <Text b color='primary'>
+                {Intl.DateTimeFormat('en', options).format(new Date(createdAt))}
+            </Text></Text>
 
             <Text size='$lg'>E-mail: <Text b color='primary' css={{ wordBreak: 'break-word' }}>{email}</Text></Text>
             {
@@ -69,17 +92,41 @@ export const FormProfile = ({ isEdit, handleLogin }: Props) => {
             }
             <Spacer y={1} />
 
-            <Input name='name' onChange={handleChange} disabled={isDisable} size='lg' width='100%' label="Full Name" value={form.name} />
+            <Input
+                name='displayName'
+                onChange={handleChange}
+                disabled={isDisable}
+                size='lg'
+                width='100%'
+                label="Full Name"
+                value={form.displayName} />
             <Spacer y={.5} />
 
-            <Input name='phone' onChange={handleChange} disabled={isDisable} size='lg' width='100%' label="Phone number" value={form.phone} type='tel' placeholder='+00 00 0000 0000' />
+            <Input
+                name='phone'
+                onChange={handleChange}
+                disabled={isDisable}
+                size='lg'
+                width='100%'
+                label="Phone number"
+                value={form.phone}
+                placeholder='+00 00 0000 0000' />
             <Spacer y={.5} />
 
-            <Input name='web' onChange={handleChange} disabled={isDisable} size='lg' width='100%' label="Portfolio web" value={form.web} type='text' placeholder='www.website.com' />
+            <Input
+                name='web'
+                onChange={handleChange}
+                disabled={isDisable}
+                size='lg'
+                width='100%'
+                label="Portfolio web"
+                value={form.web}
+                placeholder='www.website.com' />
             <Spacer y={.5} />
 
             <Textarea
-                name='about' onChange={handleChange}
+                name='about'
+                onChange={handleChange}
                 size='lg'
                 width='100%'
                 minRows={5}
@@ -94,16 +141,45 @@ export const FormProfile = ({ isEdit, handleLogin }: Props) => {
 
             {
                 isEdit
-                    ? <Radio.Group onChange={handleChange} value={form.rol} orientation="horizontal" label="Rol Account" defaultValue="primary" >
-                        <Radio size="sm" name='rol' value="recruiter" color="primary"> Recruiter </Radio>
-                        <Radio size="sm" value="worker" color="secondary" name='rol'> Worker </Radio>
+                    ? <Radio.Group
+                        onChange={handleChange}
+                        value={form.rol}
+                        orientation="horizontal"
+                        label="Rol Account"
+                        defaultValue="primary"
+                    >
+                        <Radio
+                            size="sm"
+                            name='rol'
+                            value="recruiter"
+                            color="primary"
+                        > Recruiter </Radio>
+                        <Radio
+                            size="sm"
+                            value="worker"
+                            color="secondary"
+                            name='rol'
+                        > Worker </Radio>
                     </Radio.Group>
                     : <Text size='$lg' >Currently rol: <Text b color='primary'>{form.rol}</Text></Text>
             }
             <Spacer y={2} />
-            <Col css={{ gap: '3em', d: 'flex', '@xsMax': { flexDirection: 'column-reverse', gap: '2em' } }}>
-                <Button css={{ w: '100%' }} ghost color='error'>Delete account</Button>
-                <Button disabled={isDisable} css={{ w: '100%' }} color='primary' onPress={handleSubmit}>Save Changes</Button>
+            <Col
+                css={{ gap: '3em', d: 'flex', '@xsMax': { flexDirection: 'column-reverse', gap: '2em' } }}
+            >
+                <Button
+                    css={{ w: '100%' }}
+                    ghost
+                    color='error'
+                    onPress={handleDelete}
+                >Delete account</Button>
+
+                <Button
+                    disabled={isDisable}
+                    css={{ w: '100%' }}
+                    color='primary'
+                    onPress={handleSubmit}
+                >Save Changes</Button>
             </Col>
         </Row>
     )

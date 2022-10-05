@@ -1,7 +1,7 @@
-import { PropsLayout } from "../../interfaces"
 import { Container } from '@nextui-org/react';
-import { CustomNavbar } from "../ui";
 import Head from 'next/head';
+import { PropsLayout } from "../../interfaces";
+import { CustomNavbar } from "../ui";
 
 
 export const MainLayout = ({ children, title }: PropsLayout) => {

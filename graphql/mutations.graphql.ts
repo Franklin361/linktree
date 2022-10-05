@@ -9,3 +9,11 @@ export const UPDATE_USER = gql`
     }
   }
 `
+
+export const UPDATE_USER_AVATAR = gql`
+  mutation ($id: uuid!, $avatarUrl: String!) {
+    updateUser(pk_columns: { id: $id }, _set: { avatarUrl: $avatarUrl }) {
+      id
+    }
+  }
+`

@@ -1,6 +1,8 @@
 import { useSignOut, useUserData } from "@nhost/react";
 import { Navbar, Text, Dropdown, Avatar, Link } from '@nextui-org/react';
 import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setUser } from "../../redux";
 
 const collapseItems = [
     {
@@ -63,7 +65,8 @@ export const CustomNavbar = () => {
 }
 
 export const DropDown = () => {
-    const user = useUserData()
+    const { user } = useAppSelector(state => state.user);
+    const dispatch = useAppDispatch()
     const { signOut } = useSignOut()
 
     return (
@@ -81,7 +84,11 @@ export const DropDown = () => {
                 aria-label="User menu actions"
                 color="secondary"
                 onAction={(actionKey) => {
-                    if (actionKey === 'logout') return signOut()
+                    if (actionKey === 'logout') {
+                        signOut()
+                        dispatch(setUser(null))
+                        return
+                    }
                 }}
 
             >
