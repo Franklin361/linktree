@@ -9,6 +9,8 @@ import { useAppDispatch, useSimpleForm } from "../../hooks";
 import withoutAuth from '../../components/withoutAuth';
 import { User } from "../../interfaces";
 import { setUser } from "../../redux";
+import toast from 'react-hot-toast';
+import { useSignOut } from '@nhost/react';
 
 const initValues = {
     email: 'frankomtzlucas361@gmail.com',
@@ -18,6 +20,7 @@ const initValues = {
 const LoginPage: NextPage = () => {
 
     const dispatch = useAppDispatch();
+    const { signOut } = useSignOut()
 
     const { signInEmailPassword, isLoading, needsEmailVerification, isError, error } = useSignInEmailPassword()
 
@@ -26,13 +29,19 @@ const LoginPage: NextPage = () => {
         initValues,
         onSubmit: async () => {
             const { email, password } = form
-            const { isSuccess, accessToken, needsEmailVerification, user } = await signInEmailPassword(email, password)
-
-            // TODO: store token in some cookie
+            const { isSuccess, needsEmailVerification, user } = await signInEmailPassword(email, password)
 
             if (isSuccess && !needsEmailVerification && user && user?.email) {
 
                 const { avatarUrl, displayName, id, metadata, email } = user
+
+                if (metadata.deleteAccount) {
+                    signOut()
+                    dispatch(setUser(null))
+                    toast.error('Your account was disabled, contact us to enable it if you need it!')
+                    return
+                }
+
                 const { about = '', phone = '', rol = '', web = '' } = metadata as unknown as User
 
                 dispatch(setUser({ about, avatarUrl, id, displayName, phone, rol, web, email }))

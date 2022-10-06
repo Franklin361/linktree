@@ -18,4 +18,8 @@ export const useInitUser = (checkingAuth: boolean) => {
             dispatch(setUser({ about, avatarUrl, id, displayName, phone, rol, web, email }))
         }
     }, [checkingAuth])
+
+    return {
+        user: userData
+    }
 }

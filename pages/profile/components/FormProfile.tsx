@@ -69,7 +69,7 @@ export const FormProfile = () => {
         }
     })
 
-    const handleDelete = () => dispatch(openModal(true))
+    const handleDisabled = () => dispatch(openModal(true))
 
     if (!user) return null
 
@@ -171,8 +171,8 @@ export const FormProfile = () => {
                     css={{ w: '100%' }}
                     ghost
                     color='error'
-                    onPress={handleDelete}
-                >Delete account</Button>
+                    onPress={handleDisabled}
+                >Disabled account</Button>
 
                 <Button
                     disabled={isDisable}

@@ -26,7 +26,8 @@ const RegisterPage: NextPage = () => {
                 displayName: name,
                 metadata: {
                     name,
-                    rol: 'worker'
+                    rol: 'worker',
+                    deleteAccount: false
                 }
             })
         }

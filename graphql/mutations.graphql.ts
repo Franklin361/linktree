@@ -17,3 +17,13 @@ export const UPDATE_USER_AVATAR = gql`
     }
   }
 `
+
+export const DISABLED_USER = gql`
+  mutation ($id: uuid!, $metadata: jsonb) {
+    updateUser(pk_columns: { id: $id }, _set: { metadata: $metadata }) {
+      id,
+      metadata
+    }
+  }
+`
+

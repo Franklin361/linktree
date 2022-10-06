@@ -6,6 +6,7 @@ import { useInitUser } from '../hooks';
 import { LoadingFullScreen } from './ui';
 
 
+
 export default function withAuth(Component: NextPage) {
     return function AuthProtected(props: {}) {
 
@@ -13,11 +14,11 @@ export default function withAuth(Component: NextPage) {
 
         const { isLoading, isAuthenticated } = useAuthenticationStatus()
 
-        useInitUser(isLoading)
+        const { user } = useInitUser(isLoading)
 
         if (isLoading) return <LoadingFullScreen />
 
-        if (!isAuthenticated) {
+        if (!isAuthenticated || user?.metadata.deleteAccount) {
             router.replace('/auth/login')
             return null
         }

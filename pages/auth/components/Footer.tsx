@@ -1,4 +1,5 @@
 import { Button, Loading, Text, Link } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 
 interface Props {
     onSubmit: () => void
@@ -14,6 +15,8 @@ interface Props {
 
 export const Footer = ({ disabled, error, isError, isLoading, onSubmit, labelLink, link,
     needsEmailVerification, labelButton }: Props) => {
+
+    const { push } = useRouter()
     return (
         <>
             <Button size='lg' color='gradient' shadow onPress={onSubmit} disabled={disabled}>{labelButton}</Button>
@@ -27,7 +30,7 @@ export const Footer = ({ disabled, error, isError, isLoading, onSubmit, labelLin
             </Text>}
 
 
-            <Link href={link}> {labelLink} </Link>
+            <Link onClick={() => push(link)}> {labelLink} </Link>
         </>
     )
 }
