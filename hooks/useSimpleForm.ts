@@ -20,6 +20,7 @@ export const useSimpleForm = <T>({ initValues, onSubmit }: Props<T>) => {
 
     const handleSubmit = () => {
         onSubmit();
+        setForm(initValues)
     }
 
     return {

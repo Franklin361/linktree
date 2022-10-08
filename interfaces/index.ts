@@ -1,3 +1,4 @@
+import userSlice from '../redux/user/userSlice';
 
 
 export interface PropsLayout {
@@ -17,3 +18,22 @@ export interface User {
     about: string
     rol: string
 }
+
+
+export interface JobState {
+    id: number
+    title: string
+    desc: string
+    createdAt: string
+    user: Pick<User, 'avatarUrl' | 'id' | 'displayName'>
+}
+
+
+
+
+
+
+
+
+
+

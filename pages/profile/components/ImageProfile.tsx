@@ -8,7 +8,7 @@ interface TImageProfile {
 
 export const ImageProfile = ({ }: TImageProfile) => {
     const userData = useUserData()
-    const { isEdit, user } = useAppSelector(state => state.user)
+    const { isEdit, user, loadingUser } = useAppSelector(state => state.user)
     const { fileRef, image, ...fn } = useSelectImage(user ? user.avatarUrl : userData?.avatarUrl!)
 
     return (
@@ -24,7 +24,7 @@ export const ImageProfile = ({ }: TImageProfile) => {
 
             {
                 isEdit
-                    ? <Button ghost onPress={fn.handleOpenFiles}>Change image</Button>
+                    ? <Button disabled={loadingUser} ghost onPress={fn.handleOpenFiles}>Change image</Button>
                     : <Text size='$lg' b>Profile image:</Text>
             }
 

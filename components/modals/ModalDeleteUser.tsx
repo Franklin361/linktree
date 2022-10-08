@@ -6,9 +6,10 @@ import { useUserId, useSignOut } from '@nhost/react';
 import toast from 'react-hot-toast';
 import { useAppDispatch } from "../../hooks";
 import { openModal, setUser } from "../../redux";
+import { useUserData } from '@nhost/nextjs';
 
 export const ModalDeleteUser = () => {
-    const id = useUserId()
+    const user = useUserData()
     const { signOut } = useSignOut()
 
     const [disabledUser, { loading }] = useMutation(DISABLED_USER)
@@ -16,7 +17,15 @@ export const ModalDeleteUser = () => {
 
     const handleDelete = async () => {
         try {
-            await disabledUser({ variables: { id, metadata: { deleteAccount: true } } })
+            await disabledUser({
+                variables: {
+                    id: user?.id,
+                    metadata: {
+                        ...user?.metadata,
+                        deleteAccount: true
+                    }
+                }
+            })
             signOut()
             dispatch(setUser(null))
             toast.success('Your account was disabled!')

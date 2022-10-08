@@ -7,9 +7,12 @@ interface Props {
     children: Element
     title: string
     desc?: string
+    buttonSubmit?: Element
+    scroll?: boolean
+    disabled?: boolean
 }
 
-export const ModalLayout = ({ children, title, desc }: Props) => {
+export const ModalLayout = ({ children, title, desc, buttonSubmit, scroll = false, disabled = false }: Props) => {
 
     const dispatch = useAppDispatch()
     const { modalOpen } = useAppSelector(state => state.ui)
@@ -18,6 +21,7 @@ export const ModalLayout = ({ children, title, desc }: Props) => {
 
     return (
         <Modal
+            scroll={scroll}
             closeButton
             blur
             preventClose
@@ -30,11 +34,19 @@ export const ModalLayout = ({ children, title, desc }: Props) => {
                 <Text size='$2xl' b css={{ borderBottom: '1px solid rgba(255, 255, 255, 0.4)', pb: '.5em', w: '100%' }}>{title}</Text>
             </Modal.Header>
             <Modal.Body>
-                <Text css={{ ta: 'center' }} span size='$lg'>{desc}</Text>
+                {
+                    desc
+                        ? <Text css={{ ta: 'center' }} span size='$lg'>{desc}</Text>
+                        : <>{children}</>
+                }
             </Modal.Body>
             <Modal.Footer>
-                <Button color='error' size='lg' auto onPress={closeHandler}>Cancel</Button>
-                {children}
+                <Button color='error' size='lg' disabled={disabled} auto onPress={closeHandler}>Cancel</Button>
+                {
+                    buttonSubmit
+                        ? <>{buttonSubmit}</>
+                        : <>{children}</>
+                }
             </Modal.Footer>
         </Modal>
     )

@@ -31,7 +31,7 @@ export const FormProfile = () => {
     const [mutateUser] = useMutation(UPDATE_USER)
 
     const getInitialValue = useCallback(
-        (prop: keyof Omit<User, 'id' | 'email' | 'avatarUrl'>) => userState ? userState[prop] : (user as any)?.[prop] || '',
+        (prop: keyof Omit<User, 'id' | 'email' | 'avatarUrl'>) => userState ? userState[prop] : (user as any)?.[prop] || (user?.metadata as any)?.[prop] || '',
         [],
     )
 
@@ -76,6 +76,7 @@ export const FormProfile = () => {
     const { createdAt, email, emailVerified } = user
 
     const isDisable = loadingUser || !isEdit
+    const isRecruiter = userState?.rol === 'recruiter'
 
     return (
 
@@ -112,17 +113,20 @@ export const FormProfile = () => {
                 value={form.phone}
                 placeholder='+00 00 0000 0000' />
             <Spacer y={.5} />
-
-            <Input
-                name='web'
-                onChange={handleChange}
-                disabled={isDisable}
-                size='lg'
-                width='100%'
-                label="Portfolio web"
-                value={form.web}
-                placeholder='www.website.com' />
-            <Spacer y={.5} />
+            {
+                !isRecruiter && <>
+                    <Input
+                        name='web'
+                        onChange={handleChange}
+                        disabled={isDisable}
+                        size='lg'
+                        width='100%'
+                        label="Portfolio web"
+                        value={form.web}
+                        placeholder='www.website.com' />
+                    <Spacer y={.5} />
+                </>
+            }
 
             <Textarea
                 name='about'

@@ -27,3 +27,29 @@ export const DISABLED_USER = gql`
   }
 `
 
+export const DELETE_POST = gql`
+  mutation ($id: bigint!) {
+    delete_post_by_pk(id:$id){
+      id
+    }
+  }
+`
+
+export const CREATE_JOB = gql`
+  mutation ($title: String!, $desc: String ) {
+    insert_post_one(object:{ title: $title, desc: $desc }){
+      id,
+      title,
+      desc,
+      createdAt,
+      user {
+        displayName,
+        avatarUrl,
+        id
+      }
+    }
+  }
+`
+
+
+

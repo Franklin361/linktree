@@ -21,12 +21,20 @@ export const useSelectImage = (initImage: string) => {
     const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         const file = e.target.files[0];
+
         const preview = URL.createObjectURL(file)
         setImage(preview)
+
         try {
 
             dispatch(loadingUserState(true))
-            const { error, fileMetadata } = await nhost.storage.upload({ file })
+
+            const [dataUpload] = await Promise.all([
+                nhost.storage.upload({ file }),
+                nhost.storage.delete({ fileId: image.split('/').reverse()[0] }),
+            ])
+
+            const { error, fileMetadata } = dataUpload
 
             if (error && !fileMetadata) return;
 
@@ -37,7 +45,10 @@ export const useSelectImage = (initImage: string) => {
             await mutateUser({
                 variables: {
                     id: nhost.auth.getUser()?.id,
-                    avatarUrl: url
+                    avatarUrl: url,
+                    metadata: {
+                        ...nhost.auth.getUser()?.metadata
+                    }
                 }
             })
 
