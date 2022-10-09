@@ -51,5 +51,20 @@ export const CREATE_JOB = gql`
   }
 `
 
+export const APPLY_JOB = gql`
+  mutation ($id: bigint!) {
+    insert_post_user_one(object:{  post_id: $id }){
+      post_id,
+    }
+  }
+`
 
-
+export const DE_APPLY_JOB = gql`
+  mutation ($post_id: bigint!, $user_id: uuid!) {
+    delete_post_user_by_pk(post_id: $post_id, user_id:$user_id){
+      post{
+        id
+      }
+    }
+  }
+`

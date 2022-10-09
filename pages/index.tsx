@@ -1,18 +1,34 @@
-import { Button, Card, Row, Text, User, Container, Grid } from '@nextui-org/react';
-import type { NextPage } from 'next';
-import { CardJob, CustomLoading, LoadingFullScreen, MainLayout, ModalCreateJob } from '../components';
-import withAuth from '../components/withAuth';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { listJobs, openModal } from '../redux';
-import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_JOBS } from '../graphql';
+import { Button, Grid, Row, Text } from '@nextui-org/react';
+import { useUserId } from '@nhost/react';
+import type { NextPage } from 'next';
+import { useEffect } from 'react';
+import { CardJob, CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob } from '../components';
+import withAuth from '../components/withAuth';
+import { GET_JOBS, GET_JOBS_BY_ID } from '../graphql';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { JobState } from '../interfaces';
+import { listJobs, openModal } from '../redux';
 
 const Home: NextPage = () => {
-  const dispatch = useAppDispatch()
-  const handlerOpenModal = () => dispatch(openModal(true))
+  const { user } = useAppSelector(state => state.user)
 
+  return (
+    <MainLayout title='LinkTree | Home'>
+      {
+        user?.rol === 'recruiter'
+          ? <RecruiterSection />
+          : <WorkerSection />
+      }
+    </MainLayout>
+  )
+}
+
+export default withAuth(Home)
+
+export const WorkerSection = () => {
+
+  const dispatch = useAppDispatch()
   const { data, loading, error } = useQuery<{ post: JobState[] }>(GET_JOBS)
   const { jobs } = useAppSelector(state => state.job)
 
@@ -20,25 +36,52 @@ const Home: NextPage = () => {
     if (data?.post && !jobs) dispatch(listJobs(data.post))
   }, [data])
 
-  if (loading || !jobs) {
-    return <MainLayout title='LinkTree | Home'>
-      <CustomLoading msg='Loading your jobs' />
-    </MainLayout>
-  }
+  if (loading || !jobs) return <CustomLoading msg='Loading jobs' />
 
-  if (error && !data?.post) {
-    return <MainLayout title='LinkTree | Home'>
-      <Card css={{ w: 'fit-content', m: 'auto', px: '1em', bg: '$error' }}>
-        <Card.Body>
-          <Text b size='$lg'>Ups!, it was an error, please refresh the window</Text>
-          <Text size='$md'>{error?.message}</Text>
-        </Card.Body>
-      </Card>
-    </MainLayout>
-  }
+  if (error && !data?.post) return <CustomAlert msg={error.message} />
 
   return (
-    <MainLayout title='LinkTree | Home'>
+    <>
+      <Row justify='center' css={{ mb: '1em' }}>
+        <Text b size='$3xl' color='rgba(255,255,255,0.5)'>My Jobs</Text>
+      </Row>
+
+      <Row>
+        <Grid.Container gap={2} justify='center' lg >
+          {
+            jobs.length === 0
+              ? <Text>No Jobs</Text>
+              : jobs.map(job => (
+                <Grid><CardWorker key={job.id} {...job} /></Grid>
+              ))
+          }
+        </Grid.Container>
+      </Row>
+    </>
+  )
+}
+
+// TODO: refactor recruiter and worker section
+export const RecruiterSection = () => {
+
+  const dispatch = useAppDispatch()
+  const handlerOpenModal = () => dispatch(openModal(true))
+
+  const id = useUserId();
+  const { data, loading, error } = useQuery<{ post: JobState[] }>(GET_JOBS_BY_ID, { variables: { id } })
+
+  const { jobs } = useAppSelector(state => state.job)
+
+  useEffect(() => {
+    if (data?.post && !jobs) dispatch(listJobs(data.post))
+  }, [data])
+
+  if (loading || !jobs) return <CustomLoading msg='Loading your jobs' />
+
+  if (error && !data?.post) return <CustomAlert msg={error.message} />
+
+  return (
+    <>
 
       <ModalCreateJob />
 
@@ -56,26 +99,11 @@ const Home: NextPage = () => {
             jobs.length === 0
               ? <Text>No Jobs</Text>
               : jobs.map(job => (
-                <Grid><CardJob key={job.id} {...job} isOwn /></Grid>
+                <Grid><CardRecruiter key={job.id} {...job} /></Grid>
               ))
           }
         </Grid.Container>
       </Row>
-    </MainLayout>
-  )
-}
-
-export default withAuth(Home)
-
-
-export const Jobs = () => {
-  return (
-    <>
-
-      <Row justify='center' css={{ mb: '1em' }}>
-        <Text b size='$3xl' color='secondary'>Recent Jobs</Text>
-      </Row>
-      {/* <CardJob /> */}
     </>
   )
 }

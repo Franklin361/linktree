@@ -3,11 +3,12 @@ import { useState } from "react"
 
 interface Props<T> {
     initValues: T,
-    onSubmit: () => void
+    onSubmit: () => void,
+    isResetForm?: boolean
 }
 
 
-export const useSimpleForm = <T>({ initValues, onSubmit }: Props<T>) => {
+export const useSimpleForm = <T>({ initValues, onSubmit, isResetForm = false }: Props<T>) => {
 
     const [form, setForm] = useState<T>(initValues)
 
@@ -20,7 +21,7 @@ export const useSimpleForm = <T>({ initValues, onSubmit }: Props<T>) => {
 
     const handleSubmit = () => {
         onSubmit();
-        setForm(initValues)
+        isResetForm && setForm(initValues)
     }
 
     return {

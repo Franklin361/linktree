@@ -27,7 +27,8 @@ export const ModalCreateJob = () => {
             } catch (error) {
                 toast.error((error as Error).message)
             } finally { dispatch(openModal(false)) }
-        }
+        },
+        isResetForm: true
     })
 
     return (
