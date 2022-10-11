@@ -6,8 +6,9 @@ import { useMutation } from '@apollo/client';
 import { DE_APPLY_JOB } from "../../graphql";
 import { removeJob } from "../../redux";
 import { useUserId } from '@nhost/react';
+import { memo } from 'react';
 
-export const CardAppliedForJob = (job: JobState) => {
+export const CardAppliedForJob = memo((job: JobState) => {
     // TODO: button submit can be reused in some other components
     const dispatch = useAppDispatch()
     const user_id = useUserId()
@@ -52,4 +53,4 @@ export const CardAppliedForJob = (job: JobState) => {
             </Card.Body>
         </Card>
     )
-}
+})

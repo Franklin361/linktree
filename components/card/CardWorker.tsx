@@ -6,9 +6,10 @@ import { useAppDispatch } from "../../hooks";
 import { JobState } from '../../interfaces';
 import { addJob } from '../../redux';
 import { CardLayout } from '../layouts';
+import { memo } from 'react';
 
 
-export const CardWorker = (job: JobState) => {
+export const CardWorker = memo((job: JobState) => {
 
     const dispatch = useAppDispatch()
 
@@ -43,4 +44,4 @@ export const CardWorker = (job: JobState) => {
             </Button>
         </CardLayout>
     )
-}
+})

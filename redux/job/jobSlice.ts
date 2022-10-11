@@ -5,12 +5,14 @@ interface Jobs {
     jobs: JobState[] | null,
     myApplies: JobState[] | null,
     isLoadingJob: boolean
+    postId: number | null
 }
 
 const initialState: Jobs = {
     jobs: null,
     myApplies: null,
-    isLoadingJob: false
+    isLoadingJob: false,
+    postId: null
 }
 
 type Input = 'jobs' | 'myApplies'
@@ -36,9 +38,12 @@ export const jobSlice = createSlice({
             state.jobs = null
             state.myApplies = null
         },
+        selectPostId: (state, action: PayloadAction<number>) => {
+            state.postId = action.payload
+        },
     }
 });
 
-export const { addJob, removeJob, listJobs, clearJobs } = jobSlice.actions;
+export const { addJob, removeJob, listJobs, clearJobs, selectPostId } = jobSlice.actions;
 
 export default jobSlice.reducer

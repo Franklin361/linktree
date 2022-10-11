@@ -52,13 +52,14 @@ query($id: uuid!) {
 `
 
 export const GET_PEOPlE_TO_APPLIED = gql`
-query($id: uuid!) {
+query($id: bigint!) {
   post_user(where:{ post_id: { _eq: $id  } }){
-    post{
-      title
-    },
     userpost{
-      displayName
+        displayName,
+        avatarUrl,
+        metadata,
+        email,
+        id
     }
   }
 } 

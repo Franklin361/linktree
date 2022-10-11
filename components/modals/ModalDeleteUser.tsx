@@ -32,7 +32,7 @@ export const ModalDeleteUser = () => {
         } catch (error) {
             console.log(error)
             toast.error('Account was not deleted, try later!')
-        } finally { dispatch(openModal(false)) }
+        } finally { dispatch(openModal({ open: false })) }
     }
 
     return (

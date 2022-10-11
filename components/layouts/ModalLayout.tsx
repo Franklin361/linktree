@@ -10,17 +10,23 @@ interface Props {
     buttonSubmit?: Element
     scroll?: boolean
     disabled?: boolean
+    fullScreen?: boolean
 }
 
-export const ModalLayout = ({ children, title, desc, buttonSubmit, scroll = false, disabled = false }: Props) => {
+export const ModalLayout = ({ children, title, desc, buttonSubmit,
+    scroll = false,
+    disabled = false,
+    fullScreen = false,
+}: Props) => {
 
     const dispatch = useAppDispatch()
     const { modalOpen } = useAppSelector(state => state.ui)
 
-    const closeHandler = () => dispatch(openModal(false))
+    const closeHandler = () => dispatch(openModal({ open: false }))
 
     return (
         <Modal
+            fullScreen={fullScreen}
             scroll={scroll}
             closeButton
             blur

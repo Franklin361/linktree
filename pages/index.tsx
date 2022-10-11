@@ -3,7 +3,7 @@ import { Button, Grid, Row, Text } from '@nextui-org/react';
 import { useUserId } from '@nhost/react';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
-import { CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob } from '../components';
+import { CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob, ModalUsersApplied } from '../components';
 import withAuth from '../components/withAuth';
 import { GET_JOBS, GET_JOBS_BY_ID } from '../graphql';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -65,12 +65,13 @@ export const WorkerSection = () => {
 export const RecruiterSection = () => {
 
   const dispatch = useAppDispatch()
-  const handlerOpenModal = () => dispatch(openModal(true))
+  const handlerOpenModal = () => dispatch(openModal({ open: true, modal: 'create-job' }))
 
   const id = useUserId();
   const { data, loading, error } = useQuery<{ post: JobState[] }>(GET_JOBS_BY_ID, { variables: { id } })
 
   const { jobs } = useAppSelector(state => state.job)
+  const { typeModal } = useAppSelector(state => state.ui)
 
   useEffect(() => {
     if (data?.post && !jobs) dispatch(listJobs({ jobs: data.post }))
@@ -82,8 +83,8 @@ export const RecruiterSection = () => {
 
   return (
     <>
-
-      <ModalCreateJob />
+      {typeModal === 'create-job' && <ModalCreateJob />}
+      {typeModal === 'users-applied' && <ModalUsersApplied />}
 
       <Button onPress={handlerOpenModal} color='gradient' auto css={{ position: 'fixed', zIndex: '$10' }}>
         Create a job

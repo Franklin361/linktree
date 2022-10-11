@@ -37,7 +37,7 @@ export const CardLayout = ({ children, job, isOwn = false }: ICardLayout) => {
                     </Row>
                 </Card.Body>
                 <Card.Footer>
-                    <Row justify='flex-end' css={{ '@xsMax': { justifyContent: 'center' } }}>
+                    <Row justify='flex-end' css={{ gap: '1em', '@xsMax': { justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } }}>
                         {children}
                     </Row>
                 </Card.Footer>

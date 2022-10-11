@@ -69,7 +69,7 @@ export const FormProfile = () => {
         }
     })
 
-    const handleDisabled = () => dispatch(openModal(true))
+    const handleDisabled = () => dispatch(openModal({ open: true, modal: 'disabled-account' }))
 
     if (!user) return null
 

@@ -26,7 +26,7 @@ export const ModalCreateJob = () => {
                 dispatch(addJob({ job: data!.insert_post_one }))
             } catch (error) {
                 toast.error((error as Error).message)
-            } finally { dispatch(openModal(false)) }
+            } finally { dispatch(openModal({open:false})) }
         },
         isResetForm: true
     })

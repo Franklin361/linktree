@@ -1,18 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+type Modals = 'create-job' | 'disabled-account' | 'users-applied'
+
 interface UIState {
     modalOpen: boolean
+    typeModal: Modals
 }
 
 const initialState: UIState = {
-    modalOpen: false
+    modalOpen: false,
+    typeModal: 'create-job'
 }
 
 export const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        openModal: (state, action: PayloadAction<boolean>) => { state.modalOpen = action.payload },
+        openModal: (state, action: PayloadAction<{ open: boolean, modal?: Modals }>) => {
+            const { open, modal = 'create-job' } = action.payload
+            state.modalOpen = open
+            state.typeModal = modal
+        },
     },
 })
 
