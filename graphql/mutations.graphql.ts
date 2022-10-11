@@ -54,7 +54,17 @@ export const CREATE_JOB = gql`
 export const APPLY_JOB = gql`
   mutation ($id: bigint!) {
     insert_post_user_one(object:{  post_id: $id }){
-      post_id,
+      post{
+        id,
+        title,
+        desc,
+        createdAt,
+        user {
+        displayName,
+        avatarUrl,
+        id
+      }
+      }
     }
   }
 `

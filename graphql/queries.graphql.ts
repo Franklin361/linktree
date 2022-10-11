@@ -33,13 +33,34 @@ query {
 } 
 `
 
-// query {
-//     post_user(where:{ user_id: { _eq: "166774a0-1fd8-4560-838f-e788352b4696" }}){
-//       post{
-//         title,
-//         user{
-//           displayName
-//         }
-//       }
-//     }
-//   }
+export const GET_JOBS_APPLIES_BY_USER = gql`
+query($id: uuid!) {
+    post_user(where:{ user_id: { _eq: $id }}){
+        post {
+            id,
+            title,
+            desc,
+            createdAt,
+            user {
+                displayName,
+                avatarUrl,
+                id
+            }
+        }
+    }
+} 
+`
+
+export const GET_PEOPlE_TO_APPLIED = gql`
+query($id: uuid!) {
+  post_user(where:{ post_id: { _eq: $id  } }){
+    post{
+      title
+    },
+    userpost{
+      displayName
+    }
+  }
+} 
+`
+

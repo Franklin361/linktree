@@ -18,7 +18,7 @@ export const CardRecruiter = (job: JobState) => {
         try {
             const { id } = job
             await mutationDelete({ variables: { id } })
-            dispatch(removeJob(id))
+            dispatch(removeJob({ id }))
             toast.success('Post deleted successfully!')
 
         } catch (error) {

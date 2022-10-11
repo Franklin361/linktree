@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { APPLY_JOB } from "../../graphql";
 import { useAppDispatch } from "../../hooks";
 import { JobState } from '../../interfaces';
+import { addJob } from '../../redux';
 import { CardLayout } from '../layouts';
 
 
@@ -11,16 +12,15 @@ export const CardWorker = (job: JobState) => {
 
     const dispatch = useAppDispatch()
 
-    const [mutationAction, { loading }] = useMutation(APPLY_JOB)
+    const [mutationAction, { loading }] = useMutation<{ insert_post_user_one: { post: JobState[] } }>(APPLY_JOB)
 
     const handleApplyToJob = async () => {
         try {
 
             const { id } = job
-            await mutationAction({ variables: { id } })
+            const { data } = await mutationAction({ variables: { id } })
 
-            // TODO: dispatch add this job to somewhere to the store
-
+            dispatch(addJob({ job: data!.insert_post_user_one.post[0], input: 'myApplies' }))
             toast.success(`Apply to "${job.title}" successfully!`, { id: '1' })
         } catch (error) {
 
@@ -36,7 +36,7 @@ export const CardWorker = (job: JobState) => {
                 {
                     loading
                         ? <Row css={{ alignItems: 'center', gap: '1em' }}>
-                            <Loading size='sm' /> Deleting job...
+                            <Loading size='sm' /> Applying for this job...
                         </Row>
                         : 'Apply to this job'
                 }

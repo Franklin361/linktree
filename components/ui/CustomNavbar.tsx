@@ -2,7 +2,7 @@ import { useSignOut, useUserData } from "@nhost/react";
 import { Navbar, Text, Dropdown, Avatar, Link } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setUser } from "../../redux";
+import { clearJobs, setUser } from "../../redux";
 
 const collapseItems = [
     {
@@ -18,6 +18,8 @@ const collapseItems = [
 export const CustomNavbar = () => {
 
     const { asPath, push } = useRouter()
+
+    const user = useUserData()
 
     return (
         <Navbar isBordered variant="sticky" css={{ zIndex: '$max' }}>
@@ -43,6 +45,10 @@ export const CustomNavbar = () => {
                     collapseItems.map(({ label, to }) => (
                         <Navbar.Link isActive={asPath === to} onPress={() => push(to)} key={to}>{label}</Navbar.Link>
                     ))
+                }
+                {
+                    user?.metadata.rol === 'worker'
+                    && <Navbar.Link isActive={asPath === '/applies'} onPress={() => push('/applies')}>Applies</Navbar.Link>
                 }
             </Navbar.Content>
 
@@ -87,6 +93,7 @@ export const DropDown = () => {
                     if (actionKey === 'logout') {
                         signOut()
                         dispatch(setUser(null))
+                        dispatch(clearJobs())
                         return
                     }
                 }}

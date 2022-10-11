@@ -3,7 +3,7 @@ import { Button, Grid, Row, Text } from '@nextui-org/react';
 import { useUserId } from '@nhost/react';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
-import { CardJob, CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob } from '../components';
+import { CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob } from '../components';
 import withAuth from '../components/withAuth';
 import { GET_JOBS, GET_JOBS_BY_ID } from '../graphql';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -33,7 +33,7 @@ export const WorkerSection = () => {
   const { jobs } = useAppSelector(state => state.job)
 
   useEffect(() => {
-    if (data?.post && !jobs) dispatch(listJobs(data.post))
+    if (data?.post && !jobs) dispatch(listJobs({ jobs: data.post }))
   }, [data])
 
   if (loading || !jobs) return <CustomLoading msg='Loading jobs' />
@@ -52,7 +52,7 @@ export const WorkerSection = () => {
             jobs.length === 0
               ? <Text>No Jobs</Text>
               : jobs.map(job => (
-                <Grid><CardWorker key={job.id} {...job} /></Grid>
+                <Grid key={job.id}><CardWorker {...job} /></Grid>
               ))
           }
         </Grid.Container>
@@ -73,7 +73,7 @@ export const RecruiterSection = () => {
   const { jobs } = useAppSelector(state => state.job)
 
   useEffect(() => {
-    if (data?.post && !jobs) dispatch(listJobs(data.post))
+    if (data?.post && !jobs) dispatch(listJobs({ jobs: data.post }))
   }, [data])
 
   if (loading || !jobs) return <CustomLoading msg='Loading your jobs' />
@@ -99,7 +99,7 @@ export const RecruiterSection = () => {
             jobs.length === 0
               ? <Text>No Jobs</Text>
               : jobs.map(job => (
-                <Grid><CardRecruiter key={job.id} {...job} /></Grid>
+                <Grid key={job.id}><CardRecruiter {...job} /></Grid>
               ))
           }
         </Grid.Container>
