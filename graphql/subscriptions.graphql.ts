@@ -4,7 +4,15 @@ export const SUB_APPLIED_JOB = gql`
 subscription ($id: uuid!) {
   post_user( where:{ post: { user:{ id:{ _eq: $id } } }}){
     post{
-      title
+      title,
+      id
+    },
+    userpost{
+      displayName,
+      avatarUrl,
+      metadata,
+      email,
+      id
     }
   }
 }

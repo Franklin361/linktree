@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from "react-redux";
 import { CustomHead } from '../components';
+import { NotificationProvider } from '../context';
 import { store } from '../redux';
 import '../styles/globals.css';
 import { darkTheme } from '../theme';
@@ -20,19 +21,21 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NhostApolloProvider nhost={nhost}>
         <NextUIProvider theme={darkTheme}>
           <Provider store={store}>
-            <CustomHead />
-            <Component {...pageProps} />
-            <Toaster
-              position='bottom-right'
-              toastOptions={{
-                style: {
-                  borderRadius: '70px',
-                  background: '#000',
-                  color: '#fff',
-                  padding: '10px'
-                },
-                duration: 4000
-              }} />
+            <NotificationProvider>
+              <CustomHead />
+              <Component {...pageProps} />
+              <Toaster
+                position='bottom-right'
+                toastOptions={{
+                  style: {
+                    borderRadius: '70px',
+                    background: '#000',
+                    color: '#fff',
+                    padding: '10px'
+                  },
+                  duration: 4000
+                }} />
+            </NotificationProvider>
           </Provider>
         </NextUIProvider>
       </NhostApolloProvider>

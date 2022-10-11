@@ -38,10 +38,10 @@ export const ModalUsersApplied = () => {
     const { postId } = useAppSelector(state => state.job)
     const { data, loading, error } = useQuery<IData>(GET_PEOPlE_TO_APPLIED, { variables: { id: postId } })
 
-    if (loading || !data) return <ModalLayout fullScreen title='Users Applied (Frontend Developer React + JavaScript)' scroll buttonSubmit={<></>}><CustomLoading msg='Loading users' /></ModalLayout>
+    if (loading || !data) return <ModalLayout fullScreen title='Users Applied' scroll buttonSubmit={<></>}><CustomLoading msg='Loading users' /></ModalLayout>
 
     return (
-        <ModalLayout fullScreen title='Users Applied (Frontend Developer React + JavaScript)' scroll buttonSubmit={<></>}>
+        <ModalLayout fullScreen title='Users Applied' scroll buttonSubmit={<></>}>
             <Collapse.Group >
                 {
                     data.post_user.length === 0
