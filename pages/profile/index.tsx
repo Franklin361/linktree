@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { MainLayout, ModalDeleteUser } from '../../components';
 import withAuth from '../../components/withAuth';
 import { useAppSelector } from '../../hooks';
-import { FormProfile, ImageProfile, SwitchProfile } from './components';
+import { FormProfile, ImageProfile, SwitchProfile } from '../../components';
 
 
 const ProfilePage: NextPage = () => {

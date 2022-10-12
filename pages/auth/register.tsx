@@ -3,10 +3,9 @@ import Link from "next/link";
 import { NextPage } from "next"
 import { useRouter } from 'next/router'
 import { useSignUpEmailPassword } from '@nhost/nextjs'
-import { AuthLayout } from "../../components";
+import { AuthLayout, CustomInput, Footer } from "../../components";
 import { useSimpleForm } from "../../hooks";
 import withoutAuth from "../../components/withoutAuth";
-import { CustomInput, Footer } from "./components";
 
 const initValues = {
     email: 'frankomtzlucas361@gmail.com',

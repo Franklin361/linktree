@@ -1,6 +1,6 @@
 import { Row, Spacer, Col, Switch, Text, Loading } from '@nextui-org/react';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { startEdit } from '../../../redux';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { startEdit } from '../redux';
 import { useEffect } from 'react';
 
 interface Props {

@@ -1,6 +1,6 @@
 import { Button, Image, Row, Spacer, Text } from '@nextui-org/react';
 import { useUserData } from '@nhost/react';
-import { useAppSelector, useSelectImage } from '../../../hooks';
+import { useAppSelector, useSelectImage } from '../hooks';
 
 interface TImageProfile {
 

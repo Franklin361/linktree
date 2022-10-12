@@ -2,8 +2,7 @@ import { NextPage } from "next"
 import { useRouter } from 'next/router';
 import { useSignInEmailPassword } from '@nhost/nextjs'
 
-import { AuthLayout } from "../../components";
-import { CustomInput, Footer } from './components';
+import { AuthLayout, CustomInput, Footer } from "../../components";
 
 import { useAppDispatch, useSimpleForm } from "../../hooks";
 import withoutAuth from '../../components/withoutAuth';

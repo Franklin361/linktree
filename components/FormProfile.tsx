@@ -3,10 +3,10 @@ import { Button, Col, Input, Radio, Row, Spacer, Text, Textarea } from '@nextui-
 import { useUserData } from '@nhost/react';
 import { useCallback } from 'react';
 import toast from 'react-hot-toast';
-import { UPDATE_USER } from '../../../graphql';
-import { useAppDispatch, useAppSelector, useSimpleForm } from '../../../hooks';
-import { User } from '../../../interfaces';
-import { loadingUserState, openModal, setUser } from '../../../redux';
+import { UPDATE_USER } from '../graphql';
+import { useAppDispatch, useAppSelector, useSimpleForm } from '../hooks';
+import { User } from '../interfaces';
+import { loadingUserState, openModal, setUser } from '../redux';
 
 const options: Intl.DateTimeFormatOptions = {
     year: "2-digit",
