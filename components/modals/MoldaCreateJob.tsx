@@ -23,10 +23,10 @@ export const ModalCreateJob = () => {
                 const { data } = await createMutation({ variables: { ...form } })
 
                 toast.success('Job created successfully!')
-                dispatch(addJob({ job: data!.insert_post_one }))
+                dispatch(addJob({ job: data!.insert_post_one, input: 'recruiterJobs' }))
             } catch (error) {
                 toast.error((error as Error).message)
-            } finally { dispatch(openModal({open:false})) }
+            } finally { dispatch(openModal({ open: false })) }
         },
         isResetForm: true
     })

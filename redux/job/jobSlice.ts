@@ -2,49 +2,52 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JobState } from '../../interfaces';
 
 interface Jobs {
-    jobs: JobState[] | null,
-    myApplies: JobState[] | null,
-    isLoadingJob: boolean
-    postId: number | null
+    allJobs: JobState[] | null
+    recruiterJobs: JobState[] | null,
+    appliedJobs: JobState[] | null,
+
+    postSelected: JobState | null
 }
 
 const initialState: Jobs = {
-    jobs: null,
-    myApplies: null,
-    isLoadingJob: false,
-    postId: null
+    appliedJobs: null,
+    allJobs: null,
+    recruiterJobs: null,
+
+    postSelected: null
 }
 
-type Input = 'jobs' | 'myApplies'
+type Input = 'appliedJobs' | 'allJobs' | 'recruiterJobs'
 
 export const jobSlice = createSlice({
     name: 'job',
     initialState,
     reducers: {
-        addJob: (state, action: PayloadAction<{ job: JobState, input?: Input }>) => {
-            const { job, input = 'jobs' } = action.payload
+        addJob: (state, action: PayloadAction<{ job: JobState, input: Input }>) => {
 
-            if (input === 'jobs') {
-                state.jobs = state.jobs ? [job, ...state.jobs] : [job]
-            } else {
-                state.myApplies = state.myApplies ? [job, ...state.myApplies] : [job]
-            }
+            const { input, job } = action.payload
+
+            state[input] = state[input] === null ? [job] : [job, ...state[input]!]
         },
-        removeJob: (state, action: PayloadAction<{ id: JobState['id'], input?: Input }>) => {
-            const { id, input = 'jobs' } = action.payload
-            state[input] = state[input] ? state[input].filter(job => job.id !== id) : []
+        removeJob: (state, action: PayloadAction<{ id: number, input: Input }>) => {
+
+            const { id, input } = action.payload
+
+            state[input] = state[input]?.filter(job => job.id !== id) || state[input]
         },
-        listJobs: (state, action: PayloadAction<{ jobs: JobState[], input?: Input }>) => {
-            const { jobs, input = 'jobs' } = action.payload
-            state[input] = jobs
+        listJobs: (state, action: PayloadAction<{ jobs: JobState[], input: Input }>) => {
+            const { input, jobs } = action.payload
+
+            state[input] = [...jobs]
+        },
+        selectPostId: (state, action: PayloadAction<JobState | null>) => {
+            state.postSelected = action.payload
         },
         clearJobs: (state) => {
-            state.isLoadingJob = false
-            state.jobs = null
-            state.myApplies = null
-        },
-        selectPostId: (state, action: PayloadAction<number>) => {
-            state.postId = action.payload
+            state.allJobs = null
+            state.appliedJobs = null
+            state.postSelected = null
+            state.recruiterJobs = null
         },
     }
 });

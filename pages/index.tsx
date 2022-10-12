@@ -1,11 +1,11 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { Button, Grid, Row, Text } from '@nextui-org/react';
 import { useUserId } from '@nhost/react';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import { CardWorker, CardRecruiter, CustomAlert, CustomLoading, MainLayout, ModalCreateJob, ModalUsersApplied } from '../components';
 import withAuth from '../components/withAuth';
-import { GET_JOBS, GET_JOBS_BY_ID } from '../graphql';
+import { GET_JOBS, GET_JOBS_BY_ID, SUB_JOBS } from '../graphql';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { JobState } from '../interfaces';
 import { listJobs, openModal } from '../redux';
@@ -30,13 +30,28 @@ export const WorkerSection = () => {
 
   const dispatch = useAppDispatch()
   const { data, loading, error } = useQuery<{ post: JobState[] }>(GET_JOBS)
-  const { jobs } = useAppSelector(state => state.job)
+  const { allJobs, appliedJobs } = useAppSelector(state => state.job)
 
   useEffect(() => {
-    if (data?.post && !jobs) dispatch(listJobs({ jobs: data.post }))
+    if (data?.post && !allJobs) dispatch(listJobs({ jobs: data.post, input: 'allJobs' }))
   }, [data])
 
-  if (loading || !jobs) return <CustomLoading msg='Loading jobs' />
+
+  useSubscription(SUB_JOBS, {
+    onData: ({ client, data }) => {
+
+      client.writeQuery({
+        query: GET_JOBS,
+        data: {
+          ...data.data
+        }
+      })
+
+      dispatch(listJobs({ input: 'allJobs', jobs: data.data.post }))
+    }
+  })
+
+  if (loading || !allJobs) return <CustomLoading msg='Loading jobs' />
 
   if (error && !data?.post) return <CustomAlert msg={error.message} />
 
@@ -49,9 +64,9 @@ export const WorkerSection = () => {
       <Row>
         <Grid.Container gap={2} justify='center' lg >
           {
-            jobs.length === 0
+            allJobs.length === 0
               ? <Text>No Jobs</Text>
-              : jobs.map(job => (
+              : allJobs.map(job => (
                 <Grid key={job.id}><CardWorker {...job} /></Grid>
               ))
           }
@@ -70,14 +85,14 @@ export const RecruiterSection = () => {
   const id = useUserId();
   const { data, loading, error } = useQuery<{ post: JobState[] }>(GET_JOBS_BY_ID, { variables: { id } })
 
-  const { jobs } = useAppSelector(state => state.job)
+  const { recruiterJobs } = useAppSelector(state => state.job)
   const { typeModal } = useAppSelector(state => state.ui)
 
   useEffect(() => {
-    if (data?.post && !jobs) dispatch(listJobs({ jobs: data.post }))
+    if (data?.post && !recruiterJobs) dispatch(listJobs({ jobs: data.post, input: 'recruiterJobs' }))
   }, [data])
 
-  if (loading || !jobs) return <CustomLoading msg='Loading your jobs' />
+  if (loading || !recruiterJobs) return <CustomLoading msg='Loading your jobs' />
 
   if (error && !data?.post) return <CustomAlert msg={error.message} />
 
@@ -97,9 +112,9 @@ export const RecruiterSection = () => {
       <Row>
         <Grid.Container gap={2} justify='center' lg >
           {
-            jobs.length === 0
+            recruiterJobs.length === 0
               ? <Text>No Jobs</Text>
-              : jobs.map(job => (
+              : recruiterJobs.map(job => (
                 <Grid key={job.id}><CardRecruiter {...job} /></Grid>
               ))
           }

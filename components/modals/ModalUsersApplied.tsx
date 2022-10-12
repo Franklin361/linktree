@@ -1,9 +1,12 @@
 import { Button, Collapse, Grid, Row, Text, Avatar, Link, Spacer } from '@nextui-org/react';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { ModalLayout } from '../layouts/ModalLayout';
-import { useQuery } from '@apollo/client';
-import { GET_PEOPlE_TO_APPLIED } from '../../graphql';
+import { useQuery, useSubscription } from '@apollo/client';
+import { GET_PEOPlE_TO_APPLIED, SUB_APPLIED_JOB } from '../../graphql';
 import { CustomLoading } from '../ui';
+import { selectPostId } from '../../redux';
+import { useUserId } from '@nhost/react';
+import { useEffect } from 'react';
 
 interface User {
     displayName: string
@@ -34,14 +37,23 @@ function getRandomInt() {
 }
 
 export const ModalUsersApplied = () => {
+    const id = useUserId()
+    const { postSelected } = useAppSelector(state => state.job)
+    const dispatch = useAppDispatch()
+    const { data, loading, refetch } = useQuery<IData>(GET_PEOPlE_TO_APPLIED, { variables: { id: postSelected?.id }, partialRefetch: true })
 
-    const { postId } = useAppSelector(state => state.job)
-    const { data, loading, error } = useQuery<IData>(GET_PEOPlE_TO_APPLIED, { variables: { id: postId } })
-
+    useEffect(() => {
+        refetch({ id: postSelected?.id })
+    }, [])
     if (loading || !data) return <ModalLayout fullScreen title='Users Applied' scroll buttonSubmit={<></>}><CustomLoading msg='Loading users' /></ModalLayout>
 
+    const handleClose = () => {
+        dispatch(selectPostId(null))
+    }
+
+
     return (
-        <ModalLayout fullScreen title='Users Applied' scroll buttonSubmit={<></>}>
+        <ModalLayout fullScreen title='Users Applied' scroll buttonSubmit={<></>} customOnClose={handleClose} >
             <Collapse.Group >
                 {
                     data.post_user.length === 0

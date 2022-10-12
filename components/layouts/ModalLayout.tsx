@@ -11,18 +11,23 @@ interface Props {
     scroll?: boolean
     disabled?: boolean
     fullScreen?: boolean
+    customOnClose?: () => void
 }
 
 export const ModalLayout = ({ children, title, desc, buttonSubmit,
     scroll = false,
     disabled = false,
     fullScreen = false,
+    customOnClose,
 }: Props) => {
 
     const dispatch = useAppDispatch()
     const { modalOpen } = useAppSelector(state => state.ui)
 
-    const closeHandler = () => dispatch(openModal({ open: false }))
+    const closeHandler = () => {
+        dispatch(openModal({ open: false }))
+        customOnClose && customOnClose()
+    }
 
     return (
         <Modal

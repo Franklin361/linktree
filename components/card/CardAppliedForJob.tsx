@@ -18,7 +18,7 @@ export const CardAppliedForJob = memo((job: JobState) => {
         try {
             const { id } = job
             await mutationAction({ variables: { post_id: id, user_id } })
-            dispatch(removeJob({ input: 'myApplies', id }))
+            dispatch(removeJob({ input: 'appliedJobs', id }))
             toast.success('De-apply for this job')
         } catch (error) {
             toast.error((error as Error).message)

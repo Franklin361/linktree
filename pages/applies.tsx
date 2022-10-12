@@ -1,12 +1,12 @@
 import { CardAppliedForJob, CustomAlert, CustomLoading, MainLayout } from '../components';
 import withAuth from '../components/withAuth';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { JobState } from '../interfaces';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useEffect } from 'react';
 import { listJobs } from '../redux';
 import { useUserId } from '@nhost/react';
-import { GET_JOBS_APPLIES_BY_USER } from '../graphql';
+import { GET_JOBS_APPLIES_BY_USER, SUB_APPLIES } from '../graphql';
 import { Grid } from '@nextui-org/react';
 
 const AppliesPage = () => {
@@ -28,26 +28,47 @@ export const MyApplies = () => {
     const id = useUserId();
     const { data, loading, error } = useQuery<{ post_user: { post: JobState[] }[] }>(GET_JOBS_APPLIES_BY_USER, { variables: { id } })
     const dispatch = useAppDispatch()
-    const { myApplies } = useAppSelector(state => state.job)
+    const { appliedJobs } = useAppSelector(state => state.job)
+
+    useSubscription(SUB_APPLIES, {
+        variables: { id },
+        onData: ({ data, client }) => {
+            const newData = data.data.post_user.map((post: { post: JobState[] }) => {
+                if (post.post[0]?.id) return post.post[0]
+            })
+
+            dispatch(listJobs({
+                input: 'appliedJobs',
+                jobs: newData.filter(Boolean)
+            }))
+
+            client.writeQuery({
+                query: GET_JOBS_APPLIES_BY_USER,
+                variables: { id },
+                data: {
+                    ...data.data
+                }
+            })
+        }
+    })
 
     useEffect(() => {
-        if (data?.post_user && !myApplies) {
+        if (data?.post_user && !appliedJobs) {
             dispatch(listJobs({
-                input: 'myApplies',
+                input: 'appliedJobs',
                 jobs: data.post_user.map(data => { return data.post[0] })
             }))
         }
     }, [data])
 
-    console.log({ myApplies })
-    if (loading || !myApplies) return <CustomLoading msg='Loading your applies for jobs' />
+    if (loading || !appliedJobs) return <CustomLoading msg='Loading your applies for jobs' />
 
     if (error && !data?.post_user) return <CustomAlert msg={error.message} />
 
     return (
         <Grid.Container gap={5}>
             {
-                myApplies.map(job => (
+                appliedJobs.map(job => (
                     <Grid key={job.id}>
                         <CardAppliedForJob {...job} />
                     </Grid>

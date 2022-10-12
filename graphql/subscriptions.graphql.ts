@@ -34,4 +34,22 @@ subscription {
 }
 `
 
+export const SUB_APPLIES = gql`
+subscription ($id: uuid!) {
+  post_user(where:{ user_id: { _eq: $id }}) {
+    post{
+      id,
+      title,
+      desc,
+      createdAt,
+      user {
+          displayName,
+          avatarUrl,
+          id
+      }
+    }
+  }
+}
+`
+
 

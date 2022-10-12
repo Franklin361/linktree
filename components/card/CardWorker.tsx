@@ -21,7 +21,7 @@ export const CardWorker = memo((job: JobState) => {
             const { id } = job
             await mutationAction({ variables: { id } })
 
-            dispatch(addJob({ job, input: 'myApplies' }))
+            dispatch(addJob({ job, input: 'appliedJobs' }))
             toast.success(`Apply to "${job.title}" successfully!`, { id: '1' })
         } catch (error) {
 

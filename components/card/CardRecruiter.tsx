@@ -19,7 +19,7 @@ export const CardRecruiter = memo((job: JobState) => {
         try {
             const { id } = job
             await mutationDelete({ variables: { id } })
-            dispatch(removeJob({ id }))
+            dispatch(removeJob({ id, input: 'recruiterJobs' }))
             toast.success('Post deleted successfully!')
 
         } catch (error) {
@@ -28,7 +28,7 @@ export const CardRecruiter = memo((job: JobState) => {
     }
 
     const handleOpenModal = () => {
-        dispatch(selectPostId(job.id))
+        dispatch(selectPostId(job))
         dispatch(openModal({ open: true, modal: 'users-applied' }))
     }
 
