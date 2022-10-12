@@ -54,3 +54,6 @@ export const CardAppliedForJob = memo((job: JobState) => {
         </Card>
     )
 })
+
+
+CardAppliedForJob.displayName = 'CardAppliedForJob';

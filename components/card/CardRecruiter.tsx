@@ -48,3 +48,5 @@ export const CardRecruiter = memo((job: JobState) => {
         </CardLayout>
     )
 })
+
+CardRecruiter.displayName = 'CardRecruiter'
