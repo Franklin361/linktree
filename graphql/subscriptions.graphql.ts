@@ -17,3 +17,21 @@ subscription ($id: uuid!) {
   }
 }
 `
+
+export const SUB_JOBS = gql`
+subscription {
+  post {
+    id,
+    title,
+    desc,
+    createdAt,
+    user {
+        displayName,
+        avatarUrl,
+        id
+    }
+  }
+}
+`
+
+

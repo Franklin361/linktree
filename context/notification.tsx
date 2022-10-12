@@ -1,11 +1,12 @@
 import { useSubscription } from "@apollo/client";
 import { useUserId } from "@nhost/react";
 import { createContext } from "react";
-import { GET_PEOPlE_TO_APPLIED, SUB_APPLIED_JOB } from "../graphql";
+import { GET_JOBS, GET_PEOPlE_TO_APPLIED, SUB_APPLIED_JOB, SUB_JOBS } from "../graphql";
 import { Element } from "../interfaces";
 import toast from 'react-hot-toast';
 import { Row, Text } from '@nextui-org/react';
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { listJobs } from "../redux";
 
 const NotificationContext = createContext({})
 
@@ -13,6 +14,7 @@ export const NotificationProvider = ({ children }: { children: Element }) => {
 
     const id = useUserId()
     const { postId } = useAppSelector(state => state.job)
+    const dispatch = useAppDispatch()
 
     useSubscription(SUB_APPLIED_JOB, {
         variables: { id },
@@ -46,12 +48,21 @@ export const NotificationProvider = ({ children }: { children: Element }) => {
                     ...data.data
                 }
             })
-
-
         }
     })
 
-
+    useSubscription(SUB_JOBS, {
+        onData: ({ client, data }) => {
+            console.log(data.data.post)
+            client.writeQuery({
+                query: GET_JOBS,
+                data: {
+                    ...data.data
+                }
+            })
+            dispatch(listJobs({ input: 'jobs', jobs: data.data.post }))
+        }
+    })
 
     return (
         <NotificationContext.Provider
