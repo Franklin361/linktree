@@ -19,9 +19,9 @@ export const CardWorker = memo((job: JobState) => {
         try {
 
             const { id } = job
-            const { data } = await mutationAction({ variables: { id } })
+            await mutationAction({ variables: { id } })
 
-            dispatch(addJob({ job: data!.insert_post_user_one.post[0], input: 'myApplies' }))
+            dispatch(addJob({ job, input: 'myApplies' }))
             toast.success(`Apply to "${job.title}" successfully!`, { id: '1' })
         } catch (error) {
 

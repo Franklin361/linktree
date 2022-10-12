@@ -39,7 +39,7 @@ export const MyApplies = () => {
         }
     }, [data])
 
-
+    console.log({ myApplies })
     if (loading || !myApplies) return <CustomLoading msg='Loading your applies for jobs' />
 
     if (error && !data?.post_user) return <CustomAlert msg={error.message} />

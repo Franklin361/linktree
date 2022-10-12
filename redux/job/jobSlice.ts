@@ -23,7 +23,12 @@ export const jobSlice = createSlice({
     reducers: {
         addJob: (state, action: PayloadAction<{ job: JobState, input?: Input }>) => {
             const { job, input = 'jobs' } = action.payload
-            state[input] = state[input] ? [job, ...state[input]] : []
+
+            if (input === 'jobs') {
+                state.jobs = state.jobs ? [job, ...state.jobs] : [job]
+            } else {
+                state.myApplies = state.myApplies ? [job, ...state.myApplies] : [job]
+            }
         },
         removeJob: (state, action: PayloadAction<{ id: JobState['id'], input?: Input }>) => {
             const { id, input = 'jobs' } = action.payload
