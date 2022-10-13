@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { useSignOut } from '@nhost/react';
 
 const initValues = {
-    email: 'frankomtzlucas361@gmail.com',
+    email: 'kisipob918@ishyp.com',
     password: '12345678',
 }
 

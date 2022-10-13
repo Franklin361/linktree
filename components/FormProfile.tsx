@@ -143,30 +143,8 @@ export const FormProfile = () => {
 
             <Spacer y={1} />
 
-            {
-                isEdit
-                    ? <Radio.Group
-                        onChange={handleChange}
-                        value={form.rol}
-                        orientation="horizontal"
-                        label="Rol Account"
-                        defaultValue="primary"
-                    >
-                        <Radio
-                            size="sm"
-                            name='rol'
-                            value="recruiter"
-                            color="primary"
-                        > Recruiter </Radio>
-                        <Radio
-                            size="sm"
-                            value="worker"
-                            color="secondary"
-                            name='rol'
-                        > Worker </Radio>
-                    </Radio.Group>
-                    : <Text size='$lg' >Currently rol: <Text b color='primary'>{form.rol}</Text></Text>
-            }
+            <Text size='$lg' >Currently rol: <Text b color='primary'>{form.rol}</Text></Text>
+
             <Spacer y={2} />
             <Col
                 css={{ gap: '3em', d: 'flex', '@xsMax': { flexDirection: 'column-reverse', gap: '2em' } }}

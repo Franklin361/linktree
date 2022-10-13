@@ -26,7 +26,7 @@ export const CardAppliedForJob = memo((job: JobState) => {
     }
 
     return (
-        <Card>
+        <Card >
             <Card.Header css={{ d: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2em' }}>
                 <User
                     src={job.user.avatarUrl}
@@ -37,7 +37,7 @@ export const CardAppliedForJob = memo((job: JobState) => {
                     size="lg"
                 />
 
-                <Button disabled={loading} color='error' onPress={handleDeApply} auto ghost>
+                <Button css={{ "@xsMax": { d: 'none' } }} disabled={loading} color='error' onPress={handleDeApply} auto ghost>
                     {
                         loading
                             ? <Row css={{ alignItems: 'center', gap: '1em' }}>
@@ -51,6 +51,25 @@ export const CardAppliedForJob = memo((job: JobState) => {
                 <Text color='secondary' b>{job.title}</Text>
                 <Text>{job.desc}</Text>
             </Card.Body>
+            {
+                <Card.Footer css={{
+                    "@xsMax": { d: 'flex', pt: '0', justifyContent: 'flex-end' },
+                    "@xsMin": { d: 'none' }
+                }}>
+                    <Button
+                        css={{ "@xsMax": { w: '100%' } }}
+                        disabled={loading} color='error' onPress={handleDeApply} auto ghost
+                    >
+                        {
+                            loading
+                                ? <Row css={{ alignItems: 'center', gap: '1em' }}>
+                                    <Loading size='sm' /> Dis-applying...
+                                </Row>
+                                : 'Dis-apply'
+                        }
+                    </Button>
+                </Card.Footer>
+            }
         </Card>
     )
 })

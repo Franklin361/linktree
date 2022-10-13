@@ -8,9 +8,9 @@ import { useSimpleForm } from "../../hooks";
 import withoutAuth from "../../components/withoutAuth";
 
 const initValues = {
-    email: 'frankomtzlucas361@gmail.com',
-    password: '12345678',
-    name: 'Frank'
+    email: '',
+    password: '',
+    name: ''
 }
 
 const RegisterPage: NextPage = () => {

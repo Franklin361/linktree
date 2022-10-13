@@ -26,7 +26,7 @@ export const CardWorker = memo((job: JobState) => {
         } catch (error) {
 
             const err = error as Error
-            if (err.message.includes('duplicate key value')) return toast('You already apply for this job', { icon: '⚠️' })
+            if (err.message.includes('duplicate key value')) return toast.success('You already apply for this job', { icon: '⚠️' })
             toast.error((error as Error).message)
         }
     }

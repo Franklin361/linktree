@@ -20,7 +20,7 @@ export const SwitchProfile = ({ }: Props) => {
 
     return (
         <Row
-            css={{ borderBottom: '1px solid $text', py: '1em', mb: '1em', position: 'sticky', top: '76px', zIndex: '$max', bg: '$background', d: 'flex' }}
+            css={{ borderBottom: '1px solid $text', py: '1em', mb: '1em', position: 'sticky', top: '76px', zIndex: '$5', bg: '$background', d: 'flex' }}
             className='sticky'
         >
             {

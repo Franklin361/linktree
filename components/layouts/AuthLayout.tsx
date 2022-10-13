@@ -21,7 +21,7 @@ export const AuthLayout = ({ children, title }: PropsLayout) => {
                 >{title}</Text>
             </Row>
 
-            <Card css={{ my: '3em', display: 'flex', flexDirection: 'column', w: '400px', mx: 'auto', borderRadius: '8px', gap: '2em', justifyContent: 'center', alignItems: 'center', padding: '4em 2em 2em 2em' }} >
+            <Card css={{ my: '3em', display: 'flex', flexDirection: 'column', w: '400px', mx: 'auto', borderRadius: '8px', gap: '2em', justifyContent: 'center', alignItems: 'center', padding: '4em 2em 2em 2em', '@xsMax': { w: '90%' } }} >
                 {children}
             </Card>
         </Container >

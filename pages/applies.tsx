@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { listJobs } from '../redux';
 import { useUserId } from '@nhost/react';
 import { GET_JOBS_APPLIES_BY_USER, SUB_APPLIES } from '../graphql';
-import { Grid } from '@nextui-org/react';
+import { Grid, Text } from '@nextui-org/react';
 
 const AppliesPage = () => {
 
@@ -39,7 +39,7 @@ export const MyApplies = () => {
 
             dispatch(listJobs({
                 input: 'appliedJobs',
-                jobs: newData.filter(Boolean)
+                jobs: newData.filter(Boolean).reverse()
             }))
 
             client.writeQuery({
@@ -65,14 +65,17 @@ export const MyApplies = () => {
 
     if (error && !data?.post_user) return <CustomAlert msg={error.message} />
 
+
     return (
-        <Grid.Container gap={5}>
+        <Grid.Container gap={2}>
             {
-                appliedJobs.map(job => (
-                    <Grid key={job.id}>
-                        <CardAppliedForJob {...job} />
-                    </Grid>
-                ))
+                appliedJobs.length === 0
+                    ? <Text css={{ textAlign: 'center', w: '100%', my: '2em' }}>You don't have applies for jobs 😥 </Text>
+                    : appliedJobs.map(job => (
+                        <Grid key={job.id} css={{ "@smMax": { w: '100%' } }}>
+                            <CardAppliedForJob {...job} />
+                        </Grid>
+                    ))
             }
         </Grid.Container>
     )

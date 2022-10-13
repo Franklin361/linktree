@@ -38,7 +38,7 @@ export const jobSlice = createSlice({
         listJobs: (state, action: PayloadAction<{ jobs: JobState[], input: Input }>) => {
             const { input, jobs } = action.payload
 
-            state[input] = [...jobs]
+            state[input] = [...jobs.filter(Boolean)]
         },
         selectPostId: (state, action: PayloadAction<JobState | null>) => {
             state.postSelected = action.payload

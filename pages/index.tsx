@@ -57,8 +57,14 @@ export const WorkerSection = () => {
 
   return (
     <>
-      <Row justify='center' css={{ mb: '1em' }}>
-        <Text b size='$3xl' color='rgba(255,255,255,0.5)'>My Jobs</Text>
+
+      <Row justify='center' css={{ mb: '1em', flexDirection: 'column', alignItems: 'center' }}>
+        <Text b size='$3xl'>
+          Recent Jobs 👇
+        </Text>
+        <Text color='rgba(255,255,255,0.5)' css={{ textAlign: 'center' }}>
+          These are some jobs that you can apply for it
+        </Text>
       </Row>
 
       <Row>
@@ -67,7 +73,7 @@ export const WorkerSection = () => {
             allJobs.length === 0
               ? <Text>No Jobs</Text>
               : allJobs.map(job => (
-                <Grid key={job.id}><CardWorker {...job} /></Grid>
+                <Grid css={{ "@xsMax": { w: '90%' } }} key={job.id}><CardWorker {...job} /></Grid>
               ))
           }
         </Grid.Container>
@@ -101,12 +107,17 @@ export const RecruiterSection = () => {
       {typeModal === 'create-job' && <ModalCreateJob />}
       {typeModal === 'users-applied' && <ModalUsersApplied />}
 
-      <Button onPress={handlerOpenModal} color='gradient' auto css={{ position: 'fixed', zIndex: '$10' }}>
+      <Button onPress={handlerOpenModal} color='gradient' css={{
+        position: 'fixed', zIndex: '$10', '@xsMax': { position: 'sticky', top: '6em', w: '100%', my: '2em' }
+      }}>
         Create a job
       </Button>
 
-      <Row justify='center' css={{ mb: '1em' }}>
-        <Text b size='$3xl' color='rgba(255,255,255,0.5)'>My Jobs</Text>
+      <Row justify='center' css={{ mb: '1em', flexDirection: 'column', alignItems: 'center' }}>
+        <Text b size='$3xl'>
+          Your Jobs 👇
+        </Text>
+        <Text color='rgba(255,255,255,0.5)' css={{ textAlign: 'center' }}>These are your own jobs, you can manage </Text>
       </Row>
 
       <Row>

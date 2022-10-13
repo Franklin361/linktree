@@ -10,7 +10,7 @@ interface ICardLayout {
 export const CardLayout = ({ children, job, isOwn = false }: ICardLayout) => {
     return (
 
-        <Row justify='center'>
+        <Row justify='center' >
             <Card variant='bordered'>
                 {
                     !isOwn && <>

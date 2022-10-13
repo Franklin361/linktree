@@ -19,7 +19,7 @@ export const Footer = ({ disabled, error, isError, isLoading, onSubmit, labelLin
     const { push } = useRouter()
     return (
         <>
-            <Button size='lg' color='gradient' shadow onPress={onSubmit} disabled={disabled}>{labelButton}</Button>
+            <Button size={{ "@xsMax": "md", "@xsMin": "lg" }} color='gradient' shadow onPress={onSubmit} disabled={disabled}>{labelButton}</Button>
 
             {isLoading && <Loading color='currentColor' size="md" />}
 
@@ -30,7 +30,7 @@ export const Footer = ({ disabled, error, isError, isLoading, onSubmit, labelLin
             </Text>}
 
 
-            <Link onClick={() => push(link)}> {labelLink} </Link>
+            <Link onClick={() => push(link)} css={{ textAlign: 'center' }}> {labelLink} </Link>
         </>
     )
 }
