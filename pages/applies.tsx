@@ -70,7 +70,7 @@ export const MyApplies = () => {
         <Grid.Container gap={2}>
             {
                 appliedJobs.length === 0
-                    ? <Text css={{ textAlign: 'center', w: '100%', my: '2em' }}>You don't have applies for jobs 😥 </Text>
+                    ? <Text css={{ textAlign: 'center', w: '100%', my: '2em' }}>You don not have applies for jobs 😥 </Text>
                     : appliedJobs.map(job => (
                         <Grid key={job.id} css={{ "@smMax": { w: '100%' } }}>
                             <CardAppliedForJob {...job} />
